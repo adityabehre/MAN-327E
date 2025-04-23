@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Consultation - Dr. CAM</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 80px;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .back-btn {
+            display: none;
+        }
+
+        .cart-icon {
+            display: none;
+        }
+
+        .cart-overlay {
+            display: none;
+        }
+
+        .cart-panel {
+            display: none;
+        }
+
+        .video-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 10px;
+            padding: 20px;
+            margin-bottom: 80px;
+            overflow-y: auto;
+        }
+
+        .video-tile {
+            position: relative;
+            background: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+        }
+
+        .video-tile video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+        }
+
+        .video-tile:first-child video {
+            transform: none;
+        }
+
+        .video-tile .user-info {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #2a2a2a;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .video-controls {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .control-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 18px;
+        }
+
+        .camera-btn {
+            background: var(--primary-color);
+            color: var(--warm-white);
+        }
+
+        .camera-btn.active {
+            background: var(--accent-color);
+        }
+
+        .mic-btn {
+            background: var(--primary-color);
+            color: var(--warm-white);
+        }
+
+        .mic-btn.active {
+            background: var(--accent-color);
+        }
+
+        .end-call-btn {
+            background: #dc3545;
+            color: var(--warm-white);
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow);
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        .control-btn.active {
+            box-shadow: 0 0 0 3px rgba(156, 75, 40, 0.3);
+        }
+
+        .control-btn i {
+            transition: var(--transition);
+        }
+
+        .control-btn.active i {
+            color: var(--warm-white);
+        }
+
+        .timer {
+            color: white;
+            font-size: 16px;
+            margin: 0 20px;
+        }
+
+        .chat-panel {
+            position: absolute;
+            right: 20px;
+            top: 80px;
+            background: rgba(42, 42, 42, 0.9);
+            width: 300px;
+            height: calc(100vh - 160px);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .chat-panel.collapsed {
+            transform: translateX(calc(100% - 40px));
+        }
+
+        .chat-toggle {
+            position: absolute;
+            left: -40px;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background: rgba(42, 42, 42, 0.9);
+            border: none;
+            border-radius: 8px 0 0 8px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .chat-toggle:hover {
+            background: rgba(42, 42, 42, 1);
+        }
+
+        .chat-toggle i {
+            transition: transform 0.3s ease;
+        }
+
+        .chat-panel.collapsed .chat-toggle i {
+            transform: rotate(180deg);
+        }
+
+        .chat-header {
+            padding: 15px;
+            border-bottom: 1px solid #3a3a3a;
+            color: white;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .chat-input {
+            padding: 15px;
+            border-top: 1px solid #3a3a3a;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background: #3a3a3a;
+            color: white;
+        }
+
+        .chat-input button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .message .sender {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .message .time {
+            font-size: 12px;
+            color: #888;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <!-- Top Bar (empty) -->
+        <div class="top-bar">
+        </div>
+
+        <!-- Video Grid -->
+        <div class="video-grid">
+            <div class="video-tile">
+                <video autoplay muted playsinline>
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-woman-doing-yoga-exercises-4454-large.mp4" type="video/mp4">
+                </video>
+                <div class="user-info">
+                    <span>Dr. Anjali Patel</span>
+                    <i class="fas fa-microphone"></i>
+                </div>
+            </div>
+            <div class="video-tile">
+                <video autoplay muted playsinline>
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-woman-doing-yoga-exercises-4454-large.mp4" type="video/mp4">
+                </video>
+                <div class="user-info">
+                    <span>You</span>
+                    <i class="fas fa-microphone-slash"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Panel -->
+        <div class="chat-panel">
+            <button class="chat-toggle" title="Toggle chat">
+                <i class="fas fa-comments"></i>
+            </button>
+            <div class="chat-header">
+                <h3>Chat</h3>
+            </div>
+            <div class="chat-messages">
+                <div class="message">
+                    <div class="sender">Dr. Anjali Patel <span class="time">2:30 PM</span></div>
+                    <div class="content">Hello! How can I help you today?</div>
+                </div>
+                <div class="message">
+                    <div class="sender">You <span class="time">2:31 PM</span></div>
+                    <div class="content">I've been experiencing some stress and anxiety lately.</div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="Type a message...">
+                <button>Send</button>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="video-controls">
+                <button class="control-btn camera-btn active" aria-label="Toggle camera">
+                    <i class="fas fa-video"></i>
+                </button>
+                <button class="control-btn mic-btn active" aria-label="Toggle microphone">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button class="control-btn end-call-btn" aria-label="End call">
+                    <i class="fas fa-phone-slash"></i>
+                </button>
+            </div>
+            <div class="timer">00:15:32</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            let localStream = null;
+            let screenStream = null;
+            const localVideo = document.querySelector('.video-tile:nth-child(2) video');
+            const remoteVideo = document.querySelector('.video-tile:nth-child(1) video');
+
+            // Initialize camera and microphone
+            async function initializeMedia() {
+                try {
+                    localStream = await navigator.mediaDevices.getUserMedia({
+                        video: true,
+                        audio: true
+                    });
+                    localVideo.srcObject = localStream;
+                    localVideo.muted = true; // Mute local video to prevent echo
+                    
+                    // Initialize button states
+                    const cameraBtn = document.querySelector('.camera-btn');
+                    const micBtn = document.querySelector('.mic-btn');
+                    cameraBtn.classList.add('active');
+                    micBtn.classList.add('active');
+                } catch (error) {
+                    console.error('Error accessing media devices:', error);
+                    alert('Could not access camera and microphone. Please check your permissions.');
+                }
+            }
+
+            // Toggle microphone
+            const micBtn = document.querySelector('.mic-btn');
+            micBtn.addEventListener('click', () => {
+                if (localStream) {
+                    const audioTrack = localStream.getAudioTracks()[0];
+                    if (audioTrack) {
+                        audioTrack.enabled = !audioTrack.enabled;
+                        micBtn.classList.toggle('active');
+                        const icon = micBtn.querySelector('i');
+                        if (audioTrack.enabled) {
+                            icon.classList.remove('fa-microphone-slash');
+                            icon.classList.add('fa-microphone');
+                            micBtn.title = 'Turn off microphone';
+                        } else {
+                            icon.classList.remove('fa-microphone');
+                            icon.classList.add('fa-microphone-slash');
+                            micBtn.title = 'Turn on microphone';
+                        }
+                    }
+                }
+            });
+
+            // Toggle camera
+            const cameraBtn = document.querySelector('.camera-btn');
+            cameraBtn.addEventListener('click', () => {
+                if (localStream) {
+                    const videoTrack = localStream.getVideoTracks()[0];
+                    if (videoTrack) {
+                        videoTrack.enabled = !videoTrack.enabled;
+                        cameraBtn.classList.toggle('active');
+                        const icon = cameraBtn.querySelector('i');
+                        if (videoTrack.enabled) {
+                            icon.classList.remove('fa-video-slash');
+                            icon.classList.add('fa-video');
+                            cameraBtn.title = 'Turn off camera';
+                            localVideo.style.opacity = '1';
+                        } else {
+                            icon.classList.remove('fa-video');
+                            icon.classList.add('fa-video-slash');
+                            cameraBtn.title = 'Turn on camera';
+                            localVideo.style.opacity = '0';
+                        }
+                    }
+                }
+            });
+
+            // Screen sharing
+            const screenShareBtn = document.querySelector('.control-btn:nth-child(3)');
+            screenShareBtn.addEventListener('click', async () => {
+                try {
+                    if (!screenStream) {
+                        screenStream = await navigator.mediaDevices.getDisplayMedia({
+                            video: true,
+                            audio: true
+                        });
+                        localVideo.srcObject = screenStream;
+                        screenStream.getVideoTracks()[0].onended = () => {
+                            stopScreenShare();
+                        };
+                        screenShareBtn.classList.add('active');
+                    } else {
+                        stopScreenShare();
+                    }
+                } catch (error) {
+                    console.error('Error sharing screen:', error);
+                }
+            });
+
+            function stopScreenShare() {
+                if (screenStream) {
+                    screenStream.getTracks().forEach(track => track.stop());
+                    screenStream = null;
+                    localVideo.srcObject = localStream;
+                    screenShareBtn.classList.remove('active');
+                }
+            }
+
+            // End call button
+            const endCallBtn = document.querySelector('.end-call-btn');
+            endCallBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to end the call?')) {
+                    if (localStream) {
+                        localStream.getTracks().forEach(track => track.stop());
+                    }
+                    if (screenStream) {
+                        screenStream.getTracks().forEach(track => track.stop());
+                    }
+                    window.location.href = 'consultations.html';
+                }
+            });
+
+            // Chat functionality
+            const chatInput = document.querySelector('.chat-input input');
+            const chatMessages = document.querySelector('.chat-messages');
+            
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && chatInput.value.trim()) {
+                    sendMessage(chatInput.value);
+                    chatInput.value = '';
+                }
+            });
+
+            function sendMessage(text) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message';
+                
+                const now = new Date();
+                const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                messageDiv.innerHTML = `
+                    <div class="sender">You <span class="time">${time}</span></div>
+                    <div class="content">${text}</div>
+                `;
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Start timer
+            let startTime = Date.now();
+            const timerElement = document.querySelector('.timer');
+            
+            function updateTimer() {
+                const elapsed = Date.now() - startTime;
+                const hours = Math.floor(elapsed / 3600000);
+                const minutes = Math.floor((elapsed % 3600000) / 60000);
+                const seconds = Math.floor((elapsed % 60000) / 1000);
+                
+                timerElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            setInterval(updateTimer, 1000);
+
+            // Chat toggle functionality
+            const chatPanel = document.querySelector('.chat-panel');
+            const chatToggle = document.querySelector('.chat-toggle');
+            
+            chatToggle.addEventListener('click', () => {
+                chatPanel.classList.toggle('collapsed');
+            });
+
+            // Initialize media devices
+            await initializeMedia();
+        });
+    </script>
+</body>
+</html> 

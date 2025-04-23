@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holistic Marketplace - Dr. CAM</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="brand">
+                <a href="index.html">Dr. CAM</a>
+            </div>
+            <button class="hamburger" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="consultations.html">Consultations</a></li>
+                <li><a href="marketplace.html">Marketplace</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Marketplace Header -->
+    <header class="marketplace-header">
+        <div class="container">
+            <h1>Natural Wellness Products</h1>
+            <div class="search-filters">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search remedies, supplements, or wellness tools...">
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active">All Products</button>
+                    <button class="filter-btn">Herbal Remedies</button>
+                    <button class="filter-btn">Supplements</button>
+                    <button class="filter-btn">Essential Oils</button>
+                    <button class="filter-btn">Wellness Tools</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Marketplace Content -->
+    <main class="marketplace-content">
+        <div class="container">
+            <!-- Filters Sidebar -->
+            <aside class="marketplace-filters">
+                <div class="filter-section">
+                    <h3>Price Range</h3>
+                    <div class="price-inputs">
+                        <input type="range" min="0" max="200" value="100">
+                        <div class="price-range">
+                            <span>$0</span>
+                            <span>$200</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h3>Categories</h3>
+                    <label class="checkbox-label">
+                        <input type="checkbox" checked> Herbal Supplements
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox"> Essential Oils
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox"> Ayurvedic Herbs
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox"> Wellness Tools
+                    </label>
+                </div>
+
+                <div class="filter-section">
+                    <h3>Rating</h3>
+                    <label class="checkbox-label">
+                        <input type="checkbox"> ★★★★★ & up
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox"> ★★★★ & up
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox"> ★★★ & up
+                    </label>
+                </div>
+            </aside>
+
+            <!-- Products Grid -->
+            <div class="products-container">
+                <div class="products-grid">
+                    <!-- Product Card 1 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://m.media-amazon.com/images/I/71rmHjNxl6L.jpg" alt="Organic Ashwagandha">
+                            <div class="product-badge">Bestseller</div>
+                            <button class="wishlist-btn"><i class="far fa-heart"></i></button>
+                        </div>
+                        <div class="product-content">
+                            <div class="product-category">Herbal Supplements</div>
+                            <h3>Organic Ashwagandha</h3>
+                            <div class="product-meta">
+                                <div class="rating">
+                                    <span class="stars">★★★★★</span>
+                                    <span class="count">(127)</span>
+                                </div>
+                                <div class="price">$29.99</div>
+                            </div>
+                            <button class="btn btn-primary full-width">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Product Card 2 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?q=80&w=800" alt="Essential Oil Set">
+                            <div class="product-badge">New</div>
+                            <button class="wishlist-btn"><i class="far fa-heart"></i></button>
+                        </div>
+                        <div class="product-content">
+                            <div class="product-category">Essential Oils</div>
+                            <h3>Wellness Essential Oil Set</h3>
+                            <div class="product-meta">
+                                <div class="rating">
+                                    <span class="stars">★★★★½</span>
+                                    <span class="count">(84)</span>
+                                </div>
+                                <div class="price">$49.99</div>
+                            </div>
+                            <button class="btn btn-primary full-width">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Add more product cards here -->
+                </div>
+
+                <!-- Load More Button -->
+                <div class="load-more">
+                    <button class="btn btn-secondary">Load More Products</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="tagline">Empowering your journey to holistic wellness</p>
+            <p class="copyright">&copy; 2025 Dr. CAM. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Slide-out -->
+    <div class="cart-overlay"></div>
+    <div class="cart-panel">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <button class="close-cart"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-subtotal">
+                <span>Subtotal</span>
+                <span class="subtotal-amount">$0.00</span>
+            </div>
+            <button class="btn btn-primary full-width">Checkout</button>
+        </div>
+    </div>
+
+    <!-- Cart Icon (add this to the navbar) -->
+    <div class="cart-icon">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count">0</span>
+    </div>
+</body>
+</html> 
