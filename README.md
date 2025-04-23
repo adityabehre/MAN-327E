@@ -30,11 +30,3 @@ A modern web platform for holistic health consultations and wellness products.
 1. Clone the repository
 2. Open any HTML file in your browser
 3. For video consultations, you'll need to allow camera and microphone access
-
-## Deployment
-
-This project can be hosted on any static web hosting service, such as:
-- GitHub Pages
-- Netlify
-- Vercel
-- Firebase Hosting 

@@ -1,24 +1,34 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Hamburger menu functionality
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
+    const body = document.body;
 
-    hamburger.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-        
-        // Animate hamburger
-        const spans = hamburger.querySelectorAll('span');
-        spans.forEach(span => span.classList.toggle('active'));
-    });
-});
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => {
+            // Toggle nav menu
+            navLinks.classList.toggle('active');
+            
+            // Toggle hamburger animation
+            hamburger.classList.toggle('active');
+            
+            // Prevent body scroll when menu is open
+            body.classList.toggle('menu-open');
+        });
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Cart state
-    let cart = {
-        items: [],
-        total: 0
-    };
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (navLinks.classList.contains('active') && 
+                !e.target.closest('.nav-links') && 
+                !e.target.closest('.hamburger')) {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+                body.classList.remove('menu-open');
+            }
+        });
+    }
 
-    // Cart DOM elements
+    // Cart functionality
     const cartPanel = document.querySelector('.cart-panel');
     const cartOverlay = document.querySelector('.cart-overlay');
     const cartIcon = document.querySelector('.cart-icon');
@@ -27,25 +37,45 @@ document.addEventListener('DOMContentLoaded', function() {
     const cartCount = document.querySelector('.cart-count');
     const subtotalAmount = document.querySelector('.subtotal-amount');
 
+    // Cart state
+    let cart = {
+        items: [],
+        total: 0
+    };
+
     // Toggle cart
     function toggleCart() {
         cartPanel.classList.toggle('active');
         cartOverlay.classList.toggle('active');
-        document.body.style.overflow = cartPanel.classList.contains('active') ? 'hidden' : '';
+        body.classList.toggle('cart-open');
     }
 
     // Event listeners for cart toggle
-    cartIcon.addEventListener('click', toggleCart);
-    closeCart.addEventListener('click', toggleCart);
-    cartOverlay.addEventListener('click', toggleCart);
+    if (cartIcon) {
+        cartIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleCart();
+        });
+    }
+
+    if (closeCart) {
+        closeCart.addEventListener('click', toggleCart);
+    }
+
+    if (cartOverlay) {
+        cartOverlay.addEventListener('click', toggleCart);
+    }
 
     // Add to cart functionality
     document.querySelectorAll('.btn-primary').forEach(button => {
-        if (button.textContent === 'Add to Cart') {
+        if (button.textContent.trim() === 'Add to Cart') {
             button.addEventListener('click', function(e) {
+                e.preventDefault();
                 const productCard = e.target.closest('.product-card');
+                if (!productCard) return;
+
                 const product = {
-                    id: Date.now(), // Unique ID for the cart item
+                    id: Date.now(),
                     image: productCard.querySelector('.product-image img').src,
                     title: productCard.querySelector('h3').textContent,
                     price: parseFloat(productCard.querySelector('.price').textContent.replace('$', '')),
@@ -98,8 +128,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Update cart count and subtotal
-        cartCount.textContent = cart.items.reduce((sum, item) => sum + item.quantity, 0);
-        subtotalAmount.textContent = `$${cart.total.toFixed(2)}`;
+        if (cartCount) {
+            cartCount.textContent = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+        }
+        if (subtotalAmount) {
+            subtotalAmount.textContent = `$${cart.total.toFixed(2)}`;
+        }
 
         // Add event listeners for quantity buttons
         addQuantityListeners();
@@ -129,4 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
+    // Initialize cart
+    updateCart();
 }); 

@@ -7,6 +7,126 @@
     <link rel="stylesheet" href="css/styles.css">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Mobile Responsive Styles */
+        @media (max-width: 992px) {
+            .practitioners-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 60px 20px;
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .consultation-hero {
+                padding: 80px 0 60px;
+            }
+
+            .consultation-hero h1 {
+                font-size: 36px;
+            }
+
+            .hero-subhead {
+                font-size: 18px;
+                margin-bottom: 30px;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .pricing-card {
+                padding: 20px;
+            }
+
+            .practitioners-grid {
+                grid-template-columns: 1fr;
+                gap: 80px 20px;
+            }
+
+            .practitioner-card {
+                margin-top: 40px;
+            }
+
+            .practitioner-image {
+                width: 100px;
+                height: 100px;
+                top: -50px;
+            }
+
+            .practitioner-info {
+                padding: 60px 15px 20px;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .prime-card {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .consultation-hero {
+                padding: 60px 0 40px;
+            }
+
+            .consultation-hero h1 {
+                font-size: 28px;
+            }
+
+            .hero-subhead {
+                font-size: 16px;
+                margin-bottom: 20px;
+            }
+
+            .pricing-card {
+                padding: 15px;
+            }
+
+            .pricing-card .icon {
+                font-size: 24px;
+                margin-bottom: 15px;
+            }
+
+            .practitioner-image {
+                width: 80px;
+                height: 80px;
+                top: -40px;
+            }
+
+            .practitioner-info {
+                padding: 50px 12px 15px;
+            }
+
+            .practitioner-info h3 {
+                font-size: 18px;
+            }
+
+            .specialty {
+                font-size: 14px;
+            }
+
+            .prime-card {
+                padding: 20px;
+            }
+
+            .prime-card h2 {
+                font-size: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar (same as other pages) -->
