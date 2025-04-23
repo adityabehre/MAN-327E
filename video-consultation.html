@@ -342,7 +342,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             let localStream = null;
-            let screenStream = null;
             const localVideo = document.querySelector('.video-tile:nth-child(2) video');
             const remoteVideo = document.querySelector('.video-tile:nth-child(1) video');
 
@@ -413,46 +412,12 @@
                 }
             });
 
-            // Screen sharing
-            const screenShareBtn = document.querySelector('.control-btn:nth-child(3)');
-            screenShareBtn.addEventListener('click', async () => {
-                try {
-                    if (!screenStream) {
-                        screenStream = await navigator.mediaDevices.getDisplayMedia({
-                            video: true,
-                            audio: true
-                        });
-                        localVideo.srcObject = screenStream;
-                        screenStream.getVideoTracks()[0].onended = () => {
-                            stopScreenShare();
-                        };
-                        screenShareBtn.classList.add('active');
-                    } else {
-                        stopScreenShare();
-                    }
-                } catch (error) {
-                    console.error('Error sharing screen:', error);
-                }
-            });
-
-            function stopScreenShare() {
-                if (screenStream) {
-                    screenStream.getTracks().forEach(track => track.stop());
-                    screenStream = null;
-                    localVideo.srcObject = localStream;
-                    screenShareBtn.classList.remove('active');
-                }
-            }
-
             // End call button
             const endCallBtn = document.querySelector('.end-call-btn');
             endCallBtn.addEventListener('click', () => {
                 if (confirm('Are you sure you want to end the call?')) {
                     if (localStream) {
                         localStream.getTracks().forEach(track => track.stop());
-                    }
-                    if (screenStream) {
-                        screenStream.getTracks().forEach(track => track.stop());
                     }
                     window.location.href = 'consultations.html';
                 }
